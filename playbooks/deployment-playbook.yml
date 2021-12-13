@@ -1,0 +1,17 @@
+- name: A playbook to deploy a docker image to kubernetes
+  hosts: localhost
+  user: ubuntu
+  become: yes
+
+  tasks:
+  - name: 1. Update APT Package Manager
+    apt:
+      update_cache: yes
+
+  - name: 2. Deploy to Kubernetes
+    shell:
+      cmd: kubectl create deployment coursework2 --image=paulta91/coursework2
+
+  - name: 3. View deployment
+    shell:
+      cmd: kubectl get deployments
