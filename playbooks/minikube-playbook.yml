@@ -22,5 +22,5 @@
 
   - name: 6. Start Minikube
     shell:
-      cmd: sudo minikube start
+      cmd: sudo minikube start --driver=none
 
