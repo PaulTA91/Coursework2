@@ -35,7 +35,6 @@ node {
     }
 
     stage('Deploy to Kubernetes Cluster') {
-        steps {
             ///CREATE AND APPLY THE PATCH. REMEMBER TO LOGIN ON THE CLUSTER. (-s $CLUSTER_URL --token $TOKEN_CLUSTER --insecure-skip-tls-verify)
             sh  '''
 
@@ -45,7 +44,6 @@ node {
     -s $CLUSTER_URL --token $TOKEN_CLUSTER --insecure-skip-tls-verify
 
     '''
-        }
     }
 }
 
