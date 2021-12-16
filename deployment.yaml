@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coursework2-deployment
+  labels:
+     app: serverjs-coursework2
+     type: front-end
+spec:
+  template:
+     metadata:
+       name: serverjs-pod
+       labels: 
+         app: serverjs-coursework2
+         type: front-end
+     spec:
+         containers:
+           - name: coursework2-erp
+             image: "paulta91/coursework2:latest"
+  replicas: 1
+  selector:
+    matchLabels:
+      type: front-end
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cw2-service
+spec:
+  selector:
+    app: serverjs-coursework2
+  type: LoadBalancer  
+  ports:
+    - protocol: TCP
+      targetPort: 3000
+      port: 80
+      nodePort: 30000

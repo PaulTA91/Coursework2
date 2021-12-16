@@ -33,4 +33,18 @@ node {
             app.push("latest")
         }
     }
+
+    stage('Deploy to K8s')
+  {
+   steps{
+    sshagent(['k8s-jenkins'])
+    {
+     sh 'scp -r -o StrictHostKeyChecking=no deployment.yaml ssh ubuntu@50.16.3.33:/path'script{
+      try{
+       sh 'ssh ubuntu@50.16.3.33 kubectl apply -f /path/deployment.yaml --kubeconfig=/path/kube.yaml'}catch(error)
+       {}
+     }
+    }
+   }
+  }
 }
