@@ -11,7 +11,7 @@ node {
         /* This builds the actual image; synonymous to
          * docker build on the command line */
 
-        app = docker.build("paulta91/coursework2")
+        app = docker.build('paulta91/coursework2')
     }
 
     stage('Test image') {
@@ -30,21 +30,22 @@ node {
          * Pushing multiple tags is cheap, as all the layers are reused. */
         docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
             app.push("${env.BUILD_NUMBER}")
-            app.push("latest")
+            app.push('latest')
         }
     }
 
-    stage('Deploy to K8s')
-  {
-   steps{
-    sshagent(['k8s-jenkins'])
-    {
-     sh 'scp -r -o StrictHostKeyChecking=no deployment.yaml ssh ubuntu@50.16.3.33:/path'script{
-      try{
-       sh 'ssh ubuntu@50.16.3.33 kubectl apply -f /path/deployment.yaml --kubeconfig=/path/kube.yaml'}catch(error)
-       {}
-     }
+    stage('Deploy to Kubernetes Cluster') {
+        steps {
+            ///CREATE AND APPLY THE PATCH. REMEMBER TO LOGIN ON THE CLUSTER. (-s $CLUSTER_URL --token $TOKEN_CLUSTER --insecure-skip-tls-verify)
+            sh  '''
+
+    PATCH_TO_DEPLOY={\\"metadata\\":{\\"labels\\":{\\"version\\":\\"${env.BUILD_ID}\\"}},\\"spec\\":{\\"template\\":{\\"metadata\\":{\\"labels\\":{\\"version\\":\\"${env.BUILD_ID}\\"}},\\"spec\\":{\\"containers\\":[{\\"name\\":\\"$NAME_DEPLOY\\",\\"image\\":\\"my-image:${env.BUILD_ID}\\"}]}}}}
+
+    kubectl patch deployment $NAME_DEPLOY  -n $NAMESPACE -p $PATCH_TO_DEPLOY \
+    -s $CLUSTER_URL --token $TOKEN_CLUSTER --insecure-skip-tls-verify
+
+    '''
+        }
     }
-   }
-  }
 }
+
