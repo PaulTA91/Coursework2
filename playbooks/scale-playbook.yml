@@ -1,0 +1,13 @@
+- name: A playbook to scale a deployment to allow for rolling updates
+  hosts: localhost
+  user: ubuntu
+
+  tasks:
+  - name: 1. Deploy to Kubernetes
+    shell:
+      cmd: kubectl scale deployments/coursework2 --replicas=4
+
+  - name: 2. View deployment
+    shell:
+      cmd: kubectl get deployments
+

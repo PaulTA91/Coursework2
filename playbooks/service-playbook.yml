@@ -1,0 +1,12 @@
+- name: A playbook to create a service for kubectl on a VM
+  hosts: localhost
+  user: ubuntu
+
+  tasks:
+  - name: 1. Create a service
+    shell:
+      cmd: kubectl expose deployment/coursework2 --type="NodePort" --port 8080 --name node-port-service
+
+  - name: 2. View services
+    shell:
+      cmd: kubectl get services

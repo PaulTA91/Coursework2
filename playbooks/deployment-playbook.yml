@@ -9,9 +9,11 @@
       update_cache: yes
 
   - name: 2. Deploy to Kubernetes
+    become: no
     shell:
-      cmd: kubectl create deployment coursework2 --image=paulta91/coursework2
+      cmd: kubectl create deployment coursework2 --image=paulta91/coursework2:latest
 
   - name: 3. View deployment
+    become: no
     shell:
       cmd: kubectl get deployments
